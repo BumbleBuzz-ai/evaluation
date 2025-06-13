@@ -5,8 +5,11 @@ import glob
 import argparse
 
 def aggregate_metrics(input_dir, output_file):
-    # Get all CSV files in the input directory that start with 'metrics_'
-    csv_files = glob.glob(os.path.join(input_dir, 'metrics_*.csv'))
+    # Get all CSV files in the input directory that finish with '.csv'
+    
+    csv_files = glob.glob(os.path.join(input_dir, '*.csv'))
+    ## keep only the ones finishing with _metrics.csv
+    csv_files = [f for f in csv_files if os.path.basename(f).endswith('_metrics.csv')]
 
     # Initialize an empty list to store DataFrames
     dataframes = []

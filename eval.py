@@ -7,11 +7,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Evaluate detection results (output from process.py in eavt)')
 parser.add_argument('--dir', default='example/metadata', type=str, help='Path to bumblebee dataset folder')
+parser.add_argument('--pred', default='detection', type=str, help='Path to predictions folder')
 parser.add_argument('--name', default='', type=str, help='name of site')
 args = parser.parse_args()
 
 # Load the predictions (output from process.py)
-predictions = os.path.join(args.dir,"detection",f"indices_{args.name}.csv")
+predictions = os.path.join(args.dir,args.pred,f"indices_{args.name}.csv")
 
 Df=  pd.read_csv(predictions)
 
@@ -94,7 +95,7 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver Operating Characteristic')
 plt.legend(loc='lower right')
-plt.savefig(os.path.join(args.dir,"detection",f"{args.name}_roc_curve.png"))
+plt.savefig(os.path.join(args.dir,args.pred,f"{args.name}_roc_curve.png"))
 plt.close()
 
 f1_scores = []
@@ -163,10 +164,10 @@ df_results = pd.DataFrame({
     'Recall at TPR 0.95': [results[1]['Recall']],
     'F1 score at TPR 0.95': [results[1]['F1 score']]
 })
-df_results.to_csv(os.path.join(args.dir,"detection",f"{args.name}_metrics.csv"), index=False)
+df_results.to_csv(os.path.join(args.dir,args.pred,f"{args.name}_metrics.csv"), index=False)
 print(df_results)
 
-df_gt.to_csv(os.path.join(args.dir,"detection",f"{args.name}_gtonly.csv"), index=False)
+df_gt.to_csv(os.path.join(args.dir,args.pred,f"{args.name}_gtonly.csv"), index=False)
 
 ## change column order to have buzz	domesticanimals	dB	buzzlabel	pred_0.9	pred_0.95
 cols = df_final_preds_gt.columns.tolist()
@@ -175,4 +176,4 @@ df_final_preds_gt = df_final_preds_gt[cols]
 
 
 
-df_final_preds_gt.to_csv(os.path.join(args.dir,"detection",f"{args.name}_gt_preds.csv"), index=False)
+df_final_preds_gt.to_csv(os.path.join(args.dir,args.pred,f"{args.name}_gt_preds.csv"), index=False)
